@@ -1,3 +1,8 @@
+const alarmFile = document.getElementById("alarmFile");
+const fileName = document.getElementById("fileName");
+
+let alarmAudio = new Audio();
+
 const timer = document.getElementById("timer");
 
 const startBtn = document.getElementById("start");
@@ -24,6 +29,28 @@ let hours = 0;
 
 let totalCountdownTime = 0;
 
+
+
+// SUBIR MP3
+
+alarmFile.addEventListener("change", () => {
+
+  const file = alarmFile.files[0];
+
+  if(file){
+
+    fileName.innerText = file.name;
+
+    const fileURL = URL.createObjectURL(file);
+
+    alarmAudio.src = fileURL;
+
+  }
+
+});
+
+
+
 function updateStopwatchDisplay(){
 
   let h = hours.toString().padStart(2,'0');
@@ -33,6 +60,8 @@ function updateStopwatchDisplay(){
 
   timer.innerText = `${h}:${m}:${s}.${ms}`;
 }
+
+
 
 function updateCountdownDisplay(){
 
@@ -46,6 +75,8 @@ function updateCountdownDisplay(){
 
   timer.innerText = `${h}:${m}:${s}`;
 }
+
+
 
 function startTimer(){
 
@@ -98,6 +129,13 @@ function startTimer(){
 
         document.body.classList.add("flash");
 
+        // REPRODUCIR ALARMA
+        if(alarmAudio.src){
+
+          alarmAudio.play();
+
+        }
+
         return;
 
       }
@@ -112,6 +150,8 @@ function startTimer(){
 
 }
 
+
+
 function pauseTimer(){
 
   clearInterval(interval);
@@ -119,10 +159,18 @@ function pauseTimer(){
 
 }
 
+
+
 function resetTimer(){
+
   document.body.classList.remove("flash");
+
   clearInterval(interval);
   interval = null;
+
+  // DETENER AUDIO
+  alarmAudio.pause();
+  alarmAudio.currentTime = 0;
 
   milliseconds = 0;
   seconds = 0;
@@ -136,12 +184,18 @@ function resetTimer(){
   secondsInput.value = "";
 
   if(mode === "stopwatch"){
+
     updateStopwatchDisplay();
+
   } else {
+
     timer.innerText = "00:00:00";
+
   }
 
 }
+
+
 
 modeStopwatch.addEventListener("click", () => {
 
@@ -158,6 +212,8 @@ modeStopwatch.addEventListener("click", () => {
 
 });
 
+
+
 modeCountdown.addEventListener("click", () => {
 
   resetTimer();
@@ -172,6 +228,8 @@ modeCountdown.addEventListener("click", () => {
   timer.innerText = "00:00:00";
 
 });
+
+
 
 startBtn.addEventListener("click", startTimer);
 pauseBtn.addEventListener("click", pauseTimer);
