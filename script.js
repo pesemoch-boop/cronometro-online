@@ -1,5 +1,6 @@
 const alarmFile = document.getElementById("alarmFile");
 const fileName = document.getElementById("fileName");
+const removeAlarm = document.getElementById("removeAlarm");
 
 let alarmAudio = new Audio();
 
@@ -22,6 +23,8 @@ let mode = "stopwatch";
 
 let interval = null;
 
+let isPaused = false;
+
 let milliseconds = 0;
 let seconds = 0;
 let minutes = 0;
@@ -31,7 +34,9 @@ let totalCountdownTime = 0;
 
 
 
+// =========================
 // SUBIR MP3
+// =========================
 
 alarmFile.addEventListener("change", () => {
 
@@ -51,6 +56,29 @@ alarmFile.addEventListener("change", () => {
 
 
 
+// =========================
+// QUITAR MP3
+// =========================
+
+removeAlarm.addEventListener("click", () => {
+
+  alarmAudio.pause();
+  alarmAudio.currentTime = 0;
+
+  alarmAudio.src = "";
+
+  alarmFile.value = "";
+
+  fileName.innerText = "Ningún archivo seleccionado";
+
+});
+
+
+
+// =========================
+// ACTUALIZAR STOPWATCH
+// =========================
+
 function updateStopwatchDisplay(){
 
   let h = hours.toString().padStart(2,'0');
@@ -59,9 +87,14 @@ function updateStopwatchDisplay(){
   let ms = milliseconds.toString().padStart(2,'0');
 
   timer.innerText = `${h}:${m}:${s}.${ms}`;
+
 }
 
 
+
+// =========================
+// ACTUALIZAR COUNTDOWN
+// =========================
 
 function updateCountdownDisplay(){
 
@@ -74,40 +107,72 @@ function updateCountdownDisplay(){
   s = s.toString().padStart(2,'0');
 
   timer.innerText = `${h}:${m}:${s}`;
+
 }
 
 
+
+// =========================
+// INICIAR TIMER
+// =========================
 
 function startTimer(){
 
   if(interval !== null) return;
 
+  pauseBtn.innerText = "PAUSAR";
+
+  isPaused = false;
+
+  // =====================
+  // STOPWATCH
+  // =====================
+
   if(mode === "stopwatch"){
+
+    // CONTINUAR AUDIO SI ESTÁ PAUSADO
+    if(alarmAudio.src && alarmAudio.paused){
+
+      alarmAudio.play();
+
+    }
 
     interval = setInterval(() => {
 
       milliseconds++;
 
       if(milliseconds === 100){
+
         milliseconds = 0;
         seconds++;
+
       }
 
       if(seconds === 60){
+
         seconds = 0;
         minutes++;
+
       }
 
       if(minutes === 60){
+
         minutes = 0;
         hours++;
+
       }
 
       updateStopwatchDisplay();
 
     },10);
 
-  } else {
+  }
+
+  // =====================
+  // COUNTDOWN
+  // =====================
+
+  else {
 
     if(totalCountdownTime <= 0){
 
@@ -125,12 +190,15 @@ function startTimer(){
       if(totalCountdownTime <= 0){
 
         clearInterval(interval);
+
         interval = null;
 
         document.body.classList.add("flash");
 
         // REPRODUCIR ALARMA
         if(alarmAudio.src){
+
+          alarmAudio.currentTime = 0;
 
           alarmAudio.play();
 
@@ -152,24 +220,65 @@ function startTimer(){
 
 
 
+// =========================
+// PAUSAR / CONTINUAR
+// =========================
+
 function pauseTimer(){
 
-  clearInterval(interval);
-  interval = null;
+  // PAUSAR
+  if(interval !== null){
+
+    clearInterval(interval);
+
+    interval = null;
+
+    alarmAudio.pause();
+
+    pauseBtn.innerText = "CONTINUAR";
+
+    isPaused = true;
+
+  }
+
+  // CONTINUAR
+  else if(isPaused){
+
+    startTimer();
+
+    if(alarmAudio.src){
+
+      alarmAudio.play();
+
+    }
+
+    pauseBtn.innerText = "PAUSAR";
+
+  }
 
 }
 
 
+
+// =========================
+// RESET TIMER
+// =========================
 
 function resetTimer(){
 
   document.body.classList.remove("flash");
 
   clearInterval(interval);
+
   interval = null;
+
+  pauseBtn.innerText = "PAUSAR";
+
+  isPaused = false;
 
   // DETENER AUDIO
   alarmAudio.pause();
+
   alarmAudio.currentTime = 0;
 
   milliseconds = 0;
@@ -187,7 +296,9 @@ function resetTimer(){
 
     updateStopwatchDisplay();
 
-  } else {
+  }
+
+  else {
 
     timer.innerText = "00:00:00";
 
@@ -196,6 +307,10 @@ function resetTimer(){
 }
 
 
+
+// =========================
+// CAMBIAR A STOPWATCH
+// =========================
 
 modeStopwatch.addEventListener("click", () => {
 
@@ -206,6 +321,7 @@ modeStopwatch.addEventListener("click", () => {
   countdownInputs.style.display = "none";
 
   modeStopwatch.classList.add("active");
+
   modeCountdown.classList.remove("active");
 
   updateStopwatchDisplay();
@@ -213,6 +329,10 @@ modeStopwatch.addEventListener("click", () => {
 });
 
 
+
+// =========================
+// CAMBIAR A COUNTDOWN
+// =========================
 
 modeCountdown.addEventListener("click", () => {
 
@@ -223,6 +343,7 @@ modeCountdown.addEventListener("click", () => {
   countdownInputs.style.display = "flex";
 
   modeCountdown.classList.add("active");
+
   modeStopwatch.classList.remove("active");
 
   timer.innerText = "00:00:00";
@@ -231,8 +352,20 @@ modeCountdown.addEventListener("click", () => {
 
 
 
+// =========================
+// BOTONES
+// =========================
+
 startBtn.addEventListener("click", startTimer);
+
 pauseBtn.addEventListener("click", pauseTimer);
+
 resetBtn.addEventListener("click", resetTimer);
+
+
+
+// =========================
+// INICIO
+// =========================
 
 updateStopwatchDisplay();

@@ -201,3 +201,23 @@ button:active{
   font-style:italic;
 
 }
+
+.remove-btn{
+
+  background:black;
+  color:white;
+  border:1px solid #333;
+  padding:14px 30px;
+  border-radius:12px;
+  cursor:pointer;
+  font-family:Arial Black;
+  transition:0.2s;
+
+}
+
+.remove-btn:hover{
+
+  background:white;
+  color:black;
+
+}
