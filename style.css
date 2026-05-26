@@ -92,3 +92,44 @@ body{
 button:active{
   transform:scale(0.97);
 }
+
+@media (max-width: 768px){
+
+  #timer{
+    font-size:3.5rem;
+    letter-spacing:2px;
+  }
+
+  .buttons{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .buttons button{
+    width:220px;
+  }
+
+  .inputs{
+    flex-wrap:wrap;
+  }
+
+  .inputs input{
+    width:80px;
+    font-size:1rem;
+  }
+
+  .mode-selector{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .mode-selector button{
+    width:220px;
+  }
+
+  body{
+    padding:20px;
+    overflow-x:hidden;
+  }
+
+}
