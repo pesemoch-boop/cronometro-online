@@ -133,3 +133,28 @@ button:active{
   }
 
 }
+
+.flash{
+
+  animation: flashScreen 2s infinite;
+
+}
+
+@keyframes flashScreen{
+
+  0%{
+    background:black;
+    color:white;
+  }
+
+  50%{
+    background:white;
+    color:black;
+  }
+
+  100%{
+    background:black;
+    color:white;
+  }
+
+}

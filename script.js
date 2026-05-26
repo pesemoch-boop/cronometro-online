@@ -95,6 +95,9 @@ function startTimer(){
 
         clearInterval(interval);
         interval = null;
+
+        document.body.classList.add("flash");
+
         return;
 
       }
@@ -117,7 +120,7 @@ function pauseTimer(){
 }
 
 function resetTimer(){
-
+  document.body.classList.remove("flash");
   clearInterval(interval);
   interval = null;
 
