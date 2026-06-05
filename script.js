@@ -1,4 +1,5 @@
 const defaultTitle = document.title;
+
 const alarmFile = document.getElementById("alarmFile");
 const fileName = document.getElementById("fileName");
 const removeAlarm = document.getElementById("removeAlarm");
@@ -33,8 +34,6 @@ let hours = 0;
 
 let totalCountdownTime = 0;
 
-
-
 // =========================
 // SUBIR MP3
 // =========================
@@ -43,7 +42,7 @@ alarmFile.addEventListener("change", () => {
 
   const file = alarmFile.files[0];
 
-  if(file){
+  if (file) {
 
     fileName.innerText = file.name;
 
@@ -54,8 +53,6 @@ alarmFile.addEventListener("change", () => {
   }
 
 });
-
-
 
 // =========================
 // QUITAR MP3
@@ -74,83 +71,81 @@ removeAlarm.addEventListener("click", () => {
 
 });
 
+// =========================
+// ACTUALIZAR TÍTULO PESTAÑA
+// =========================
 
-function updateTabTitle(){
+function updateTabTitle() {
 
-  if(mode === "stopwatch"){
+  if (mode === "stopwatch") {
 
-    let h = hours.toString().padStart(2,'0');
-    let m = minutes.toString().padStart(2,'0');
-    let s = seconds.toString().padStart(2,'0');
-    let ms = milliseconds.toString().padStart(2,'0');
+    let h = hours.toString().padStart(2, "0");
+    let m = minutes.toString().padStart(2, "0");
+    let s = seconds.toString().padStart(2, "0");
+    let ms = milliseconds.toString().padStart(2, "0");
 
     document.title = `⏱️ ${h}:${m}:${s}.${ms}`;
 
-  }
-
-  else{
+  } else {
 
     let h = Math.floor(totalCountdownTime / 3600);
     let m = Math.floor((totalCountdownTime % 3600) / 60);
     let s = totalCountdownTime % 60;
 
-    h = h.toString().padStart(2,'0');
-    m = m.toString().padStart(2,'0');
-    s = s.toString().padStart(2,'0');
+    h = h.toString().padStart(2, "0");
+    m = m.toString().padStart(2, "0");
+    s = s.toString().padStart(2, "0");
 
     document.title = `⏳ ${h}:${m}:${s}`;
-
-    updateTabTitle();
 
   }
 
 }
 
-
 // =========================
 // ACTUALIZAR STOPWATCH
 // =========================
 
-function updateStopwatchDisplay(){
+function updateStopwatchDisplay() {
 
-  let h = hours.toString().padStart(2,'0');
-  let m = minutes.toString().padStart(2,'0');
-  let s = seconds.toString().padStart(2,'0');
-  let ms = milliseconds.toString().padStart(2,'0');
+  let h = hours.toString().padStart(2, "0");
+  let m = minutes.toString().padStart(2, "0");
+  let s = seconds.toString().padStart(2, "0");
+  let ms = milliseconds.toString().padStart(2, "0");
 
   timer.innerText = `${h}:${m}:${s}.${ms}`;
 
+  updateTabTitle();
+
 }
-
-
 
 // =========================
 // ACTUALIZAR COUNTDOWN
 // =========================
 
-function updateCountdownDisplay(){
+function updateCountdownDisplay() {
 
   let h = Math.floor(totalCountdownTime / 3600);
   let m = Math.floor((totalCountdownTime % 3600) / 60);
   let s = totalCountdownTime % 60;
 
-  h = h.toString().padStart(2,'0');
-  m = m.toString().padStart(2,'0');
-  s = s.toString().padStart(2,'0');
+  h = h.toString().padStart(2, "0");
+  m = m.toString().padStart(2, "0");
+  s = s.toString().padStart(2, "0");
 
   timer.innerText = `${h}:${m}:${s}`;
 
+  updateTabTitle();
+
 }
-
-
 
 // =========================
 // INICIAR TIMER
 // =========================
 
-function startTimer(){
+function startTimer() {
 
-  if(interval !== null) return;
+  if (interval !== null) return;
 
   pauseBtn.innerText = "PAUSAR";
 
@@ -160,10 +155,9 @@ function startTimer(){
   // STOPWATCH
   // =====================
 
-  if(mode === "stopwatch"){
+  if (mode === "stopwatch") {
 
-    // CONTINUAR AUDIO SI ESTÁ PAUSADO
-    if(alarmAudio.src && alarmAudio.paused){
+    if (alarmAudio.src && alarmAudio.paused) {
 
       alarmAudio.play();
 
@@ -173,21 +167,21 @@ function startTimer(){
 
       milliseconds++;
 
-      if(milliseconds === 100){
+      if (milliseconds === 100) {
 
         milliseconds = 0;
         seconds++;
 
       }
 
-      if(seconds === 60){
+      if (seconds === 60) {
 
         seconds = 0;
         minutes++;
 
       }
 
-      if(minutes === 60){
+      if (minutes === 60) {
 
         minutes = 0;
         hours++;
@@ -196,7 +190,7 @@ function startTimer(){
 
       updateStopwatchDisplay();
 
-    },10);
+    }, 10);
 
   }
 
@@ -206,7 +200,7 @@ function startTimer(){
 
   else {
 
-    if(totalCountdownTime <= 0){
+    if (totalCountdownTime <= 0) {
 
       totalCountdownTime =
         (parseInt(hoursInput.value) || 0) * 3600 +
@@ -219,7 +213,7 @@ function startTimer(){
 
     interval = setInterval(() => {
 
-      if(totalCountdownTime <= 0){
+      if (totalCountdownTime <= 0) {
 
         clearInterval(interval);
 
@@ -227,11 +221,9 @@ function startTimer(){
 
         document.body.classList.add("flash");
 
-        // REPRODUCIR ALARMA
-        if(alarmAudio.src){
+        if (alarmAudio.src) {
 
           alarmAudio.currentTime = 0;
-
           alarmAudio.play();
 
         }
@@ -244,22 +236,19 @@ function startTimer(){
 
       updateCountdownDisplay();
 
-    },1000);
+    }, 1000);
 
   }
 
 }
 
-
-
 // =========================
 // PAUSAR / CONTINUAR
 // =========================
 
-function pauseTimer(){
+function pauseTimer() {
 
-  // PAUSAR
-  if(interval !== null){
+  if (interval !== null) {
 
     clearInterval(interval);
 
@@ -273,12 +262,11 @@ function pauseTimer(){
 
   }
 
-  // CONTINUAR
-  else if(isPaused){
+  else if (isPaused) {
 
     startTimer();
 
-    if(alarmAudio.src){
+    if (alarmAudio.src) {
 
       alarmAudio.play();
 
@@ -290,13 +278,11 @@ function pauseTimer(){
 
 }
 
-
-
 // =========================
 // RESET TIMER
 // =========================
 
-function resetTimer(){
+function resetTimer() {
 
   document.body.classList.remove("flash");
 
@@ -308,7 +294,8 @@ function resetTimer(){
 
   isPaused = false;
 
-  // DETENER AUDIO
+  document.title = defaultTitle;
+
   alarmAudio.pause();
 
   alarmAudio.currentTime = 0;
@@ -324,21 +311,17 @@ function resetTimer(){
   minutesInput.value = "";
   secondsInput.value = "";
 
-  if(mode === "stopwatch"){
+  if (mode === "stopwatch") {
 
     updateStopwatchDisplay();
 
-  }
-
-  else {
+  } else {
 
     timer.innerText = "00:00:00";
 
   }
 
 }
-
-
 
 // =========================
 // CAMBIAR A STOPWATCH
@@ -360,8 +343,6 @@ modeStopwatch.addEventListener("click", () => {
 
 });
 
-
-
 // =========================
 // CAMBIAR A COUNTDOWN
 // =========================
@@ -382,8 +363,6 @@ modeCountdown.addEventListener("click", () => {
 
 });
 
-
-
 // =========================
 // BOTONES
 // =========================
@@ -393,8 +372,6 @@ startBtn.addEventListener("click", startTimer);
 pauseBtn.addEventListener("click", pauseTimer);
 
 resetBtn.addEventListener("click", resetTimer);
-
-
 
 // =========================
 // INICIO
