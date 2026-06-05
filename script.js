@@ -79,6 +79,11 @@ function updateTabTitle() {
 
   if (mode === "stopwatch") {
 
+    if(interval === null){
+    document.title = defaultTitle;
+    return;
+    }
+
     let h = hours.toString().padStart(2, "0");
     let m = minutes.toString().padStart(2, "0");
     let s = seconds.toString().padStart(2, "0");
