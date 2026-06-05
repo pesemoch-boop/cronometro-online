@@ -1,3 +1,4 @@
+const defaultTitle = document.title;
 const alarmFile = document.getElementById("alarmFile");
 const fileName = document.getElementById("fileName");
 const removeAlarm = document.getElementById("removeAlarm");
@@ -73,6 +74,37 @@ removeAlarm.addEventListener("click", () => {
 
 });
 
+
+function updateTabTitle(){
+
+  if(mode === "stopwatch"){
+
+    let h = hours.toString().padStart(2,'0');
+    let m = minutes.toString().padStart(2,'0');
+    let s = seconds.toString().padStart(2,'0');
+    let ms = milliseconds.toString().padStart(2,'0');
+
+    document.title = `⏱️ ${h}:${m}:${s}.${ms}`;
+
+  }
+
+  else{
+
+    let h = Math.floor(totalCountdownTime / 3600);
+    let m = Math.floor((totalCountdownTime % 3600) / 60);
+    let s = totalCountdownTime % 60;
+
+    h = h.toString().padStart(2,'0');
+    m = m.toString().padStart(2,'0');
+    s = s.toString().padStart(2,'0');
+
+    document.title = `⏳ ${h}:${m}:${s}`;
+
+    updateTabTitle();
+
+  }
+
+}
 
 
 // =========================
